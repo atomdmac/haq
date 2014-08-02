@@ -1,0 +1,6 @@
+[submodule "js/lib/radio"]
+	path = js/lib/radio
+	url = https://github.com/uxder/Radio.git
+[submodule "js/lib/jaws"]
+	path = js/lib/jaws
+	url = https://github.com/zatch/jaws.git
