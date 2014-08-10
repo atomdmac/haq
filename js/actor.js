@@ -1,4 +1,4 @@
-define(['tile-sprite'], function (TileSprite) {
+define(['tile-sprite', 'animator'], function (TileSprite, Animator) {
 
 var Actor = function (config) {
 
@@ -28,22 +28,25 @@ Actor.prototype.act = function () {
 };
 
 Actor.prototype.move = function (direction) {
-	console.log('attempting to move ', direction);
-
 	var map = this._data.map,
 		destinationTile = map.getRelative(this, direction),
 		destinationCoords;
-	if(destinationTile && map.isPassable(destinationTile)) {
 
+	if(destinationTile && map.isPassable(destinationTile)) {
 		destinationCoords = map.tileToPx(destinationTile);
 
-		this.x = destinationCoords.x;
-		this.y = destinationCoords.y;
+		// this.x = destinationCoords.x;
+		// this.y = destinationCoords.y;
+		
 		this.xTile = destinationTile.xTile;
 		this.yTile = destinationTile.yTile;
 
-		console.log(this.x, " ", this.y);
-	} else {
+		// Animate movement.
+		Animator.add(this, {x: this.x, y: this.y}, destinationCoords);
+		Animator.play();
+	} 
+
+	else {
 		console.log('Invalid move.  You need to implement a proper log, my friend.');
 	}
 };

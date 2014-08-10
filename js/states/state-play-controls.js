@@ -1,4 +1,6 @@
-define(['jaws', 'radio', 'data/settings'], function (jaws, radio, settings) {
+define(
+['jaws', 'radio', 'data/settings', 'animator'], 
+function (jaws, radio, settings, Animator) {
 
 return function () {
 
@@ -12,28 +14,42 @@ return function () {
 		if(gamepad) {
 			// Move left
 			if(gamepad.axes[5] == -1) {
-				console.log('left');
-				lock();
+				// lock();
 				_data.player.move('W');
 			}
 
 			if(gamepad.axes[5] === 1) {
-				console.log('right');
-				lock();
+				// lock();
 				_data.player.move('E');
 			}
 			// Move up.
 			if(gamepad.axes[6] === -1) {
-				console.log('up');
-				lock();
+				// lock();
 				_data.player.move('N');
 			}
 			// Move down
 			if(gamepad.axes[6] === 1) {
-				console.log('down');
-				lock();
+				// lock();
 				_data.player.move('S');
 			}
+		}
+
+		// Keyboard
+		// Move left
+		if(jaws.pressed('left')) {
+			_data.player.move('W');
+		}
+
+		else if(jaws.pressed('right')) {
+			_data.player.move('E');
+		}
+		// Move up.
+		else if(jaws.pressed('up')) {
+			_data.player.move('N');
+		}
+		// Move down
+		else if(jaws.pressed('down')) {
+			_data.player.move('S');
 		}
 
 	};
@@ -53,12 +69,16 @@ return function () {
 	};
 
 	this.update = function () {
-		if(!_locked) _checkInput();
-		_previousState.update();
+		if(!Animator.isPlaying()) {
+			_checkInput();
+		} else {
+			Animator.tick();
+			_previousState.update();
+		}
 	};
 
 	this.draw = function () {
-		_previousState.draw();
+		if(Animator.isPlaying) _previousState.draw();
 	};
 
 };
