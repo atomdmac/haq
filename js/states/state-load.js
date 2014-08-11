@@ -73,15 +73,18 @@ return function () {
 			data: _data
 		});
 
-		_data.npc = new NPC({
+		_data.npcs = [new NPC({
 				xTile: npcSpawn.x,
 				yTile: npcSpawn.y,
 				data : _data,
 				color: 'red'
-			});
+			})];
+		_data.actors = _data.npcs.concat(_data.player);
 
-		_data.scheduler.add(_data.player, true);
-		_data.scheduler.add(_data.npc, true);
+		// Add actors to the scheduler.
+		for(var i=0, ilen=_data.actors.length; i<ilen; i++) {
+			_data.scheduler.add(_data.actors[i], true);
+		}
 
 		jaws.switchGameState(new PlayState(), {}, _data);
 	};

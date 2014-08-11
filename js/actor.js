@@ -63,12 +63,28 @@ Actor.prototype.wait = function () {
 	this._isActing = false;
 };
 
+Actor.prototype.checkCollisions = function (xTile, yTile) {
+	if(typeof xTile === 'object') yTile = xTile.yTile, xTile = xTile.xTile;
+	var actors = this._data.actors,
+		collisions = [];
+	for(var i=0, ilen = actors.length; i<ilen; i++) {
+		if(actors[i] === this) continue;
+		if(actors[i].xTile === xTile && actors[i].yTile === yTile) {
+			collisions.push(actors[i]);
+		}
+	}
+	if(collisions.length) {
+		return collisions;
+	}
+	return false;
+};
+
 Actor.prototype.move = function (direction) {
 	var map = this._data.map,
 		destinationTile = map.getRelative(this, direction),
 		destinationCoords;
 
-	if(destinationTile && map.isPassable(destinationTile)) {
+	if(destinationTile && map.isPassable(destinationTile) && !this.checkCollisions(destinationTile)) {
 		destinationCoords = map.tileToPx(destinationTile);
 		
 		this.xTile = destinationTile.xTile;

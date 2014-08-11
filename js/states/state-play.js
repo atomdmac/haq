@@ -25,7 +25,10 @@ return function () {
 		_viewport.centerAround(_data.player);
 		_viewport.drawTileMap2(_data.map, _data.player);
 		_viewport.draw(_data.player);
-		if(_data.player.canSee(_data.npc))_viewport.draw(_data.npc);
+
+		for(var i=0, ilen=_data.npcs.length; i<ilen; i++) {
+			if(_data.player.canSee(_data.npcs[i]))_viewport.draw(_data.npcs[i]);
+		}
 	};
 };
 
