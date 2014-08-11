@@ -111,9 +111,13 @@ Actor.prototype.wander = function () {
 	this.move(dirs[index]);
 };
 
-Actor.prototype.track = function (target) {
+Actor.prototype.seek = function (target) {
 	// TODO
 };
+
+Actor.prototype.flee = function (target) {
+	// TODO
+}
 
 Actor.prototype.travel = function (target) {
 	// TODO
