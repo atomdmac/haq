@@ -48,15 +48,20 @@ return function () {
 		function _chooseEntitySpawn(mapGen) {
 			var rooms = mapGen.getRooms(),
 				index = Math.floor(Math.random() * rooms.length),
-				room  = rooms[index];
+				room  = rooms[index],
+				left  = room.getLeft() +1,
+				right = room.getRight()-1,
+				top   = room.getTop()+1,
+				bottom= room.getBottom()-1;
+				xTile = Math.floor(Math.random() * (right - left  ) + left),
+				yTile = Math.floor(Math.random() * (top   - bottom) + top );
 			return {	
-				x: Math.round((room.getRight() - room.getLeft()) / 2 + room.getLeft()),
-				y: Math.round((room.getBottom() - room.getTop()) / 2 + room.getTop())
+				xTile: xTile,
+				yTile: yTile
 			};
 		}
 
-		var playerSpawn = _chooseEntitySpawn(mapGen),
-			npcSpawn    = _chooseEntitySpawn(mapGen);
+		var playerSpawn = _chooseEntitySpawn(mapGen);
 
 		// Set up data structure that will be shared between game states.
 		_data.map       = map;
@@ -68,17 +73,27 @@ return function () {
 		});
 		_data.player    = new Player({
 			color: 'green',
-			xTile: playerSpawn.x,
-			yTile: playerSpawn.y,
+			xTile: playerSpawn.xTile,
+			yTile: playerSpawn.yTile,
 			data: _data
 		});
+		_data.npcs = [];
 
-		_data.npcs = [new NPC({
-				xTile: npcSpawn.x,
-				yTile: npcSpawn.y,
-				data : _data,
-				color: 'red'
-			})];
+		// Generate some NPCs.
+		(function () {
+			for(var i=0; i<10; i++) {
+				var spawnPoint = _chooseEntitySpawn(mapGen);
+				_data.npcs.push(
+					new NPC({
+						xTile: spawnPoint.xTile,
+						yTile: spawnPoint.yTile,
+						data : _data,
+						color: 'red'
+					})
+				);
+			}
+		})();
+
 		_data.actors = _data.npcs.concat(_data.player);
 
 		// Add actors to the scheduler.
