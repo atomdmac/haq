@@ -14,13 +14,13 @@ Player.prototype.act = function () {
 
 Player.prototype.wait = function () {
 	Actor.prototype.wait.call(this);
-	Animator.play();
+	this._isActing = false;
 };
 
 Player.prototype.move = function (direction) {
 	// If move command was successful, play all queued animations.
 	if(Actor.prototype.move.call(this, direction)) {
-		Animator.play();
+		this._isActing = false;
 	}
 };
 

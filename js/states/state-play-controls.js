@@ -70,11 +70,17 @@ return function () {
 			if(_data.player.isActing()) {
 				_checkInput();
 			} else {
-				var safety = 0, safetyMax = 20;
-				while(!_data.player.isActing()) {
+				var safety = 0, safetyMax = 100;
+				while(true) {
 					if(safety > safetyMax) break;
 					var actor = _data.scheduler.next();
-					actor.act();
+					if(actor === _data.player) {
+						Animator.play();
+						actor.act();
+						break;
+					} else {
+						actor.act();
+					}
 				}
 			}
 		} else {
