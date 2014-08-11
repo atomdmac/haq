@@ -133,8 +133,45 @@ Map.prototype.getDistance = function (target1, target2) {
  * @param  {Number} y1 To Y coordinate.
  * @return {Array|Boolean}
  */
-Map.prototype.dda = function (x1, y1, x2, y1) {
+Map.prototype.lineOfSight = function (x1, y1, x2, y1) {
 	// TODO
+};
+
+// TODO: Make maximum fovRadius equal to the viewport size.
+Map.prototype.getSurroundings = function (xTile, yTile, fovRadius) {
+	if(typeof xTile === 'object') fovRadius = xTile.getFovRadius, yTile = xTile.yTile, xTile = xTile.xTile;
+
+	// Return data placeholders.
+	var surroundings = {},
+	// Used for callback scoping.
+		self = this;
+
+	// Callback for determining if a given tile allows light to pass.
+	function __canPassLight (xTile, yTile) {
+		if(xTile > self.size[0] -1) return false;
+		if(yTile > self.size[1] -1) return false;
+		if(xTile < 0) return false;
+		if(yTile < 0) return false;
+
+		var items = self.cell(xTile, yTile);
+		for(var i=0,ilen=items.length; i<ilen; i++) {
+			if(!items[i].isTransparent) return false;
+		}
+		return true;
+	}
+
+	// Callback for each cell as visibility is determined.
+	function __onComputeVisibility(xTile, yTile, radius, visibility) {
+		if(visibility) {
+			surroundings[xTile + "_" + yTile] = self.cell(xTile, yTile);
+		}
+	}
+
+	// Compute visibility.
+	var fov = new ROT.FOV.PreciseShadowcasting( __canPassLight );
+	fov.compute(xTile, yTile, fovRadius, __onComputeVisibility);
+
+	return surroundings;
 };
 
 return Map;

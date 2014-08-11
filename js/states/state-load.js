@@ -1,6 +1,6 @@
 define(
-['jaws', 'rot', 'data/settings', 'map', 'states/state-play', 'tile-sprite', 'actor'], 
-function (jaws, rot, settings, Map, PlayState, TileSprite, Actor) {
+['jaws', 'rot', 'data/settings', 'map', 'states/state-play', 'tile-sprite', 'player', 'npc'], 
+function (jaws, rot, settings, Map, PlayState, TileSprite, Player, NPC) {
 
 return function () {
 
@@ -46,14 +46,17 @@ return function () {
 		// TODO: Check to make sure entity spawn doesn't collide with other entity spawns
 		// TODO: Don't always drop entities in first room.
 		function _chooseEntitySpawn(mapGen) {
-			var room = mapGen.getRooms()[0];
+			var rooms = mapGen.getRooms(),
+				index = Math.floor(Math.random() * rooms.length),
+				room  = rooms[index];
 			return {	
 				x: Math.round((room.getRight() - room.getLeft()) / 2 + room.getLeft()),
 				y: Math.round((room.getBottom() - room.getTop()) / 2 + room.getTop())
 			};
 		}
 
-		var playerSpawn = _chooseEntitySpawn(mapGen);
+		var playerSpawn = _chooseEntitySpawn(mapGen),
+			npcSpawn    = _chooseEntitySpawn(mapGen);
 
 		// Set up data structure that will be shared between game states.
 		_data.map       = map;
@@ -63,13 +66,22 @@ return function () {
 			width : settings.view.width,
 			height: settings.view.height
 		});
-		_data.player    = new Actor({
+		_data.player    = new Player({
 			color: 'green',
 			xTile: playerSpawn.x,
 			yTile: playerSpawn.y,
 			data: _data
 		});
-		_data.npcs      = [];
+
+		_data.npc = new NPC({
+				xTile: npcSpawn.x,
+				yTile: npcSpawn.y,
+				data : _data,
+				color: 'red'
+			});
+
+		_data.scheduler.add(_data.player, true);
+		_data.scheduler.add(_data.npc, true);
 
 		jaws.switchGameState(new PlayState(), {}, _data);
 	};

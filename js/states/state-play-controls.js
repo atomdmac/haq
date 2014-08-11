@@ -14,23 +14,24 @@ return function () {
 		if(gamepad) {
 			// Move left
 			if(gamepad.axes[5] == -1) {
-				// lock();
 				_data.player.move('W');
 			}
-
-			if(gamepad.axes[5] === 1) {
-				// lock();
+			// Move right
+			else if(gamepad.axes[5] === 1) {
 				_data.player.move('E');
 			}
 			// Move up.
-			if(gamepad.axes[6] === -1) {
-				// lock();
+			else if(gamepad.axes[6] === -1) {
 				_data.player.move('N');
 			}
 			// Move down
-			if(gamepad.axes[6] === 1) {
-				// lock();
+			else if(gamepad.axes[6] === 1) {
 				_data.player.move('S');
+			}
+
+			// Wait.
+			else if(gamepad.buttons[4].pressed) {
+				_data.player.wait();
 			}
 		}
 
@@ -52,6 +53,11 @@ return function () {
 			_data.player.move('S');
 		}
 
+		// Wait.
+		else if(jaws.pressed('.')) {
+			_data.player.wait();
+		}
+
 	};
 
 	this.setup = function (data) {
@@ -59,18 +65,18 @@ return function () {
 		_previousState = jaws.previous_game_state;
 	};
 
-	
-	_locked = false;
-	var lock = function () {
-		_locked = true;
-		setTimeout(function () {
-			_locked = false;
-		}, 100);
-	};
-
 	this.update = function () {
 		if(!Animator.isPlaying()) {
-			_checkInput();
+			if(_data.player.isActing()) {
+				_checkInput();
+			} else {
+				var safety = 0, safetyMax = 20;
+				while(!_data.player.isActing()) {
+					if(safety > safetyMax) break;
+					var actor = _data.scheduler.next();
+					actor.act();
+				}
+			}
 		} else {
 			Animator.tick();
 			_previousState.update();
