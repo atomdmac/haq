@@ -127,14 +127,40 @@ Map.prototype.getDistance = function (target1, target2) {
 /**
  * Return an array of cells that represent a path from x1,y1 to x2,y2 if such a
  * path exists.  Else, return the boolean value FALSE.
- * @param  {Number} x1 From X coordinate.
- * @param  {Number} y1 From Y coordinate.
- * @param  {Number} x2 To X coordinate.
- * @param  {Number} y1 To Y coordinate.
+ *
+ * Credit is due here: http://stackoverflow.com/questions/4672279/bresenham-algorithm-in-javascript
+ * 
+ * @param  {TileSprite} The starting tile (should have xTile/yTile properties).
+ * @param  {TileSprite} The ending tile (should have xTile/yTile properties).
  * @return {Array|Boolean}
  */
-Map.prototype.lineOfSight = function (x1, y1, x2, y1) {
-	// TODO
+Map.prototype.lineOfSight = function (target1, target2) {
+	var x0 = target1.xTile,
+		y0 = target1.yTile,
+		x1 = target2.xTile,
+		y1 = target2.yTile,
+		path = [];
+
+	var dx = Math.abs(x1-x0);
+	var dy = Math.abs(y1-y0);
+	var sx = (x0 < x1) ? 1 : -1;
+	var sy = (y0 < y1) ? 1 : -1;
+	var err = dx-dy;
+
+	while(true){
+		// If appropriate, add cell to path.
+		if(this.inBounds(x0, y0) && this.isTransparent(x0, y0)) {
+			path.push({xTile: x0, yTile: y0});
+		} else {
+			return false;
+		}
+
+		if ((x0==x1) && (y0==y1)) break;
+		var e2 = 2*err;
+		if (e2 >-dy){ err -= dy; x0  += sx; }
+		if (e2 < dx){ err += dx; y0  += sy; }
+	}
+	return path;
 };
 
 // TODO: Make maximum fovRadius equal to the viewport size.

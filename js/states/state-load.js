@@ -88,7 +88,7 @@ return function () {
 						xTile: spawnPoint.xTile,
 						yTile: spawnPoint.yTile,
 						data : _data,
-						color: 'red'
+						color: 'blue'
 					})
 				);
 			}
