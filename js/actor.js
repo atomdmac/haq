@@ -6,10 +6,14 @@ var Actor = function (config) {
 
 	this._data      = config.data  || {};
 	this._speed     = config.speed || 1;
-	this._fovRadius = config.fovRadius || 50;
+	this._fovRadius = config.fovRadius || 20;
 	this._isActing  = false;
 	this._surroundings = {};
 	this._mapMemory    = {};
+	this._seekTarget = null;
+	this._seekPath   = [];
+
+	this.isPassable = false;
 
 	this.getSpeed = function () {
 		return this._speed;
@@ -84,6 +88,27 @@ Actor.prototype.move = function (direction) {
 		destinationTile = map.getRelative(this, direction),
 		destinationCoords;
 
+	return this.moveTo(destinationTile);
+};
+
+Actor.prototype.moveTo = function (xTile, yTile) {
+	
+	var map = this._data.map,
+		destinationTile, 
+		destinationCoords;
+	
+	if(typeof xTile === 'object') {
+		destinationTile = {
+			xTile: xTile.xTile,
+			yTile: xTile.yTile
+		};
+	} else {
+		destinationTile = {
+			xTile: xTile,
+			yTile: yTile
+		};
+	}
+
 	if(destinationTile && map.isPassable(destinationTile) && !this.checkCollisions(destinationTile)) {
 		destinationCoords = map.tileToPx(destinationTile);
 		
@@ -112,12 +137,34 @@ Actor.prototype.wander = function () {
 };
 
 Actor.prototype.seek = function (target) {
-	// TODO
+	if(target && this._seekTarget !== target) {
+		var path = this._data.map.lineOfSight(this, target);
+		if(path) {
+			// Remove cell that Actor currently resides in.
+			path.shift();
+			this._seekPath = path;
+		}
+	}
+
+	if(this._seekPath.length && this._data.map.isPassable(this._seekPath[0])) {
+		var destinationTile = this._seekPath.shift(),
+			destinationCoords = this._data.map.tileToPx(destinationTile); 
+
+		this.xTile = destinationTile.xTile;
+		this.yTile = destinationTile.yTile;
+
+		// Animate movement.
+		Animator.add(this, {x: this.x, y: this.y}, destinationCoords);
+
+		return true;
+	} else {
+		return false;
+	}
 };
 
 Actor.prototype.flee = function (target) {
 	// TODO
-}
+};
 
 Actor.prototype.travel = function (target) {
 	// TODO

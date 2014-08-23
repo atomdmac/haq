@@ -9,10 +9,18 @@ NPC.prototype = new Actor({});
 NPC.prototype.act = function () {
 	Actor.prototype.act.call(this);
 
-	if(this._data.map.lineOfSight(this, this._data.player)) {
+	this.updateSurroundings();
+	this.updateMemory();
+	
+	if(this.canSee(this._data.player)) {
+		this.seek(this._data.player);
+	}
+
+	if(this._seekPath.length) {
 		this.color = '#ff0000';
 	} else {
 		this.color = '#0000ff';
+		this.wander();
 	}
 	// TODO: Allow JawsJS library to handle re-coloring without having to reset a Sprite's canvas/context. 
 	var canvas = document.createElement('canvas');
@@ -24,7 +32,6 @@ NPC.prototype.act = function () {
     this.image = canvas;
 
 	// TODO: Make NPCs do other stuff besides wander around.
-	this.wander();
 };
 
 return NPC;
