@@ -49,12 +49,12 @@ return function () {
 			var rooms = mapGen.getRooms(),
 				index = Math.floor(Math.random() * rooms.length),
 				room  = rooms[index],
-				left  = room.getLeft() +1,
-				right = room.getRight()-1,
-				top   = room.getTop()+1,
-				bottom= room.getBottom()-1;
-				xTile = Math.floor(Math.random() * (right - left  ) + left),
-				yTile = Math.floor(Math.random() * (top   - bottom) + top );
+				left  = room.getLeft() + 1,
+				right = room.getRight() - 1,
+				top   = room.getTop() + 1,
+				bottom= room.getBottom() - 1;
+				xTile = Math.floor(Math.random() * (right - left  ) + left) + 1,
+				yTile = Math.floor(Math.random() * (top   - bottom) + top ) + 1;
 			return {	
 				xTile: xTile,
 				yTile: yTile
@@ -78,6 +78,7 @@ return function () {
 			data: _data
 		});
 		_data.npcs = [];
+		_data.actors = [_data.player];
 
 		// Generate some NPCs.
 		(function () {
