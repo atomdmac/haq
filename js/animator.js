@@ -3,7 +3,7 @@ define(['lib/frame-tween'], function (FrameTween) {
 return new function () {
 
 	var _queue = [],
-		_duration = 10,
+		_duration = 5,
 		_index,
 		_isPlaying = false;
 
