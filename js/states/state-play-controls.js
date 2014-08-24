@@ -37,24 +37,45 @@ return function () {
 
 		// Keyboard
 		// Move left
-		if(jaws.pressed('left')) {
+		
+
+		
+		// Move up.
+		if(jaws.pressedWithoutRepeat('numpad9')) {
+			_data.player.move('NE');
+		}
+
+		else if(jaws.pressedWithoutRepeat('numpad8')) {
+			_data.player.move('N');
+		}
+
+		else if(jaws.pressedWithoutRepeat('numpad7')) {
+			_data.player.move('NW');
+		}
+		
+		else if(jaws.pressedWithoutRepeat('numpad6')) {
+			_data.player.move('E');
+		}
+
+		else if(jaws.pressedWithoutRepeat('numpad4')) {
 			_data.player.move('W');
 		}
 
-		else if(jaws.pressed('right')) {
-			_data.player.move('E');
+		else if(jaws.pressedWithoutRepeat('numpad3')) {
+			_data.player.move('SE');
 		}
-		// Move up.
-		else if(jaws.pressed('up')) {
-			_data.player.move('N');
-		}
+
 		// Move down
-		else if(jaws.pressed('down')) {
+		else if(jaws.pressedWithoutRepeat('numpad2')) {
 			_data.player.move('S');
 		}
 
+		else if(jaws.pressedWithoutRepeat('numpad1')) {
+			_data.player.move('SW');
+		}
+
 		// Wait.
-		else if(jaws.pressed('.')) {
+		else if(jaws.pressedWithoutRepeat('. numpad5')) {
 			_data.player.wait();
 		}
 

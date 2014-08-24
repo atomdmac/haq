@@ -77,19 +77,20 @@ Map.prototype.getRelative = function (target, direction, distance) {
 		xOffset = 0,
 		yOffset = 0;
 
-	switch(direction) {
-		case 'N':
-			yOffset = -1;
-			break;
-		case 'E':
-			xOffset = 1;
-			break;
-		case 'S':
-			yOffset = 1;
-			break;
-		case 'W':
-			xOffset = -1;
-			break;
+	if(direction == 'E' || direction == 'SE' || direction == 'NE' ) {
+		xOffset = 1;
+	}
+
+	if(direction == 'W' || direction == 'SW' || direction == 'NW') {
+		xOffset = -1;
+	}
+
+	if(direction == 'N' || direction == 'NE' || direction == 'NW') {
+		yOffset = -1;
+	}
+
+	if(direction == 'S' || direction == 'SE' || direction == 'SW') {
+		yOffset = 1
 	}
 
 	xTile += xOffset * distance;
