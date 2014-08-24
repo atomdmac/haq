@@ -80,7 +80,6 @@ return function () {
 			data: _data
 		});
 		_data.npcs = [];
-		_data.actors = [_data.player];
 
 		// Generate some NPCs.
 		(function () {
