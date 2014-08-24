@@ -73,6 +73,8 @@ return function () {
 		});
 		_data.player    = new Player({
 			color: 'green',
+			width: settings.map.tile.width,
+			height: settings.map.tile.height,
 			xTile: playerSpawn.xTile,
 			yTile: playerSpawn.yTile,
 			data: _data
@@ -86,6 +88,8 @@ return function () {
 				var spawnPoint = _chooseEntitySpawn(mapGen);
 				_data.npcs.push(
 					new NPC({
+						width: settings.map.tile.width,
+						height: settings.map.tile.height,
 						xTile: spawnPoint.xTile,
 						yTile: spawnPoint.yTile,
 						data : _data,
