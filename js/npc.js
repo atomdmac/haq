@@ -13,10 +13,10 @@ NPC.prototype.act = function () {
 	this.updateMemory();
 	
 	if(this.canSee(this._data.player)) {
-		this.seek(this._data.player);
+		this.updateTravelPath(this._data.player);
 	}
 
-	if(this._seekPath.length) {
+	if(this.travel()) {
 		this.color = '#ff0000';
 	} else {
 		this.color = '#0000ff';

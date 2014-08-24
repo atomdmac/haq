@@ -11,7 +11,7 @@ var Actor = function (config) {
 	this._surroundings = {};
 	this._mapMemory    = {};
 	this._seekTarget = null;
-	this._seekPath   = [];
+	this._travelPath = [];
 
 	this.isPassable = false;
 
@@ -137,37 +137,44 @@ Actor.prototype.wander = function () {
 };
 
 Actor.prototype.seek = function (target) {
-	if(target && this._seekTarget !== target) {
-		var path = this._data.map.lineOfSight(this, target);
-		if(path) {
-			// Remove cell that Actor currently resides in.
-			path.shift();
-			this._seekPath = path;
-		}
-	}
-
-	if(this._seekPath.length && this._data.map.isPassable(this._seekPath[0]) && !this.checkCollisions(this._seekPath[0])) {
-		var destinationTile = this._seekPath.shift(),
-			destinationCoords = this._data.map.tileToPx(destinationTile); 
-
-		this.xTile = destinationTile.xTile;
-		this.yTile = destinationTile.yTile;
-
-		// Animate movement.
-		Animator.add(this, {x: this.x, y: this.y}, destinationCoords);
-
-		return true;
-	} else {
-		return false;
-	}
+	// TODO
 };
 
 Actor.prototype.flee = function (target) {
 	// TODO
 };
 
-Actor.prototype.travel = function (target) {
-	// TODO
+/**
+ * Attempt to follow the path computed by Actor.updateTravelPath().  If the path
+ * is blocked, return FALSE and do nothing.
+ * @return {Boolean} Return TRUE if path can be followed currently or FALSE if the path is blocked.
+ */
+Actor.prototype.travel = function () {
+	// If no travel path exists, return false.
+	if(!this._travelPath || !this._travelPath.length) return false;
+
+	if(this.moveTo(this._travelPath[0])) {
+		this._travelPath.shift();
+		return true;
+	} else {
+		return false;
+	}
+};
+
+/**
+ * Compute a path from the Actor's current position to the target tile.
+ * @param  {TileSprite} target An object with xTile and yTile properties.
+ * @return {Void}              Update the internal _travelPath property that 
+ *                             will be used by the Actor.travel() method.
+ */
+Actor.prototype.updateTravelPath = function (target) {
+	var path = this._data.map.getPath(target, this);
+	if(path) {
+		path.shift();
+		this._travelPath = path;
+	} else {
+		this._travelPath = false;
+	}
 };
 
 return Actor;

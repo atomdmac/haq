@@ -201,6 +201,30 @@ Map.prototype.getSurroundings = function (xTile, yTile, fovRadius) {
 	return surroundings;
 };
 
+Map.prototype.getPath = function (target1, target2) {
+	var self = this, path = [];
+	function __passableCallback(x, y) {
+		return self.isPassable.call(self, x, y);
+	}
+
+	function __addToPath(xTile, yTile) {
+		path.push({
+			xTile: xTile,
+			yTile: yTile
+		});
+	}
+
+	var pathFinder = new ROT.Path.AStar(target1.xTile, target1.yTile, __passableCallback);
+	pathFinder.compute(target2.xTile, target2.yTile, __addToPath);
+
+	if(path.length) {
+		return path;
+	} else {
+		return false;
+	}
+
+};
+
 return Map;
 
 });
