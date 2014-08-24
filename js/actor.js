@@ -146,7 +146,7 @@ Actor.prototype.seek = function (target) {
 		}
 	}
 
-	if(this._seekPath.length && this._data.map.isPassable(this._seekPath[0])) {
+	if(this._seekPath.length && this._data.map.isPassable(this._seekPath[0]) && !this.checkCollisions(this._seekPath[0])) {
 		var destinationTile = this._seekPath.shift(),
 			destinationCoords = this._data.map.tileToPx(destinationTile); 
 
