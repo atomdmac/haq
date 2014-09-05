@@ -20,11 +20,16 @@ return function () {
 			})
 		);
 
+		var newMapSize = {
+			width : Math.round(ROT.RNG.getUniform() * (settings.map.width.max - settings.map.width.min)) + settings.map.width.min,
+			height: Math.round(ROT.RNG.getUniform() * (settings.map.height.max - settings.map.height.min)) + settings.map.height.min
+		};
+
 		// Generate the map data.
-		var mapGen = new ROT.Map.Digger(50,50),
+		var mapGen = new ROT.Map.Digger(newMapSize.width,newMapSize.height),
 			map = new Map({
 				cell_size: [settings.map.tile.width, settings.map.tile.height],
-				size     : [settings.map.width.max, settings.map.height.max]
+				size     : [newMapSize.width, newMapSize.height]
 			});
 
 		function _createMap(x, y, type) {
@@ -83,7 +88,7 @@ return function () {
 
 		// Generate some NPCs.
 		(function () {
-			for(var i=0; i<10; i++) {
+			for(var i=0; i<8; i++) {
 				var spawnPoint = _chooseEntitySpawn(mapGen);
 				_data.npcs.push(
 					new NPC({

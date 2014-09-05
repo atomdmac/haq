@@ -61,7 +61,24 @@ Map.prototype.isTransparent = function (xTile, yTile) {
 };
 
 Map.prototype.containsActor = function (xTile, yTile) {
-	// TODO
+	if(typeof xTile === 'object') yTile = xTile.yTile, xTile = xTile.xTile;
+	if(this.getActorsAt(xTile, yTile).length) {
+		return true;
+	} else {
+		return false;
+	}
+};
+
+Map.prototype.getActorsAt = function (xTile, yTile) {
+	if(typeof xTile === 'object') yTile = xTile.yTile, xTile = xTile.xTile;
+	var allActors = this._data.allActors,
+		actors = [];
+	for(var i=0, ilen=allActors.length; i<ilen; i++) {
+		if(allActors[i].xTile == xTile && allActors[i].yTile == yTile) {
+			actors.push(allActors[i]);
+		}
+	}
+	return actors;
 };
 
 Map.prototype.containsItem = function (xTile, yTile) {

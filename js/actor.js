@@ -73,7 +73,7 @@ Actor.prototype.checkCollisions = function (xTile, yTile) {
 		collisions = [];
 	for(var i=0, ilen = actors.length; i<ilen; i++) {
 		if(actors[i] === this) continue;
-		if(actors[i].xTile === xTile && actors[i].yTile === yTile) {
+		if(actors[i].xTile === xTile && actors[i].yTile === yTile && actors[i]._isAlive) {
 			collisions.push(actors[i]);
 		}
 	}
@@ -152,7 +152,7 @@ Actor.prototype.flee = function (target) {
 Actor.prototype.travel = function () {
 	// If no travel path exists, return false.
 	if(!this._travelPath || !this._travelPath.length) return false;
-
+	
 	if(this.moveTo(this._travelPath[0])) {
 		this._travelPath.shift();
 		return true;

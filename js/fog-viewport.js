@@ -17,9 +17,10 @@ FogViewport.prototype.drawTileMap2 = function(tileMap, player) {
 
     		else if(player.canRemember(sprites[i].xTile, sprites[i].yTile)) {
     			sprites[i].alpha = 0.5;
-    			sprites[i].draw();
-    		}
-    	}
+                sprites[i].draw();
+            }
+            // sprites[i].draw();
+        }
     });
 };
 

@@ -1,13 +1,15 @@
-define(['actor'], function (Actor) {
+define(['character'], function (Character) {
 
 var NPC = function (options) {
-	Actor.call(this, options);
+	Character.call(this, options);
 };
 
-NPC.prototype = new Actor({});
+NPC.prototype = new Character({});
 
 NPC.prototype.act = function () {
-	Actor.prototype.act.call(this);
+	if(!this._isAlive) return;
+
+	Character.prototype.act.call(this);
 
 	this.updateSurroundings();
 	this.updateMemory();
@@ -17,7 +19,7 @@ NPC.prototype.act = function () {
 	}
 
 	if(this.travel()) {
-		this.color = '#ff0000';
+		this.color = 'orange';
 	} else {
 		this.color = '#0000ff';
 		this.wander();

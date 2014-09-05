@@ -20,6 +20,34 @@ return function () {
 
 	this.update = function () {};
 
+	// Debug draw functions
+	function _drawNpcPaths (npc) {
+		// Draw NPC paths... please clean this up... dear god...
+		if(npc._travelPath && npc._travelPath.length) {
+			jaws.context.save();
+			jaws.context.translate(-_viewport.x, -_viewport.y);
+
+			var ctx = jaws.context, 
+				path = npc._travelPath,
+				x, y, w, h;
+
+			for(var q=0; q<npc._travelPath.length; q++) {
+				x = path[q].xTile * 16;
+				y = path[q].yTile * 16;
+				w = 16;
+				h = 16;
+
+				ctx.strokeStyle = "pink";
+				ctx.lineWidth = 1;
+				ctx.beginPath();
+				ctx.rect(x, y, w, h);
+				ctx.stroke();
+
+			}
+			jaws.context.restore();
+		}
+	}
+
 	this.draw = function () {
 		jaws.fill('#000000');
 		_viewport.centerAround(_data.player);
@@ -27,7 +55,8 @@ return function () {
 		_viewport.draw(_data.player);
 
 		for(var i=0, ilen=_data.npcs.length; i<ilen; i++) {
-			if(_data.player.canSee(_data.npcs[i]))_viewport.draw(_data.npcs[i]);
+			if(_data.player.canSee(_data.npcs[i])) _viewport.draw(_data.npcs[i]);
+			if(settings.npc.drawPaths) _drawNpcPaths(_data.npcs[i]);
 		}
 	};
 };
