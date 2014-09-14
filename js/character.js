@@ -1,9 +1,9 @@
 define(
-['jaws', 'data/settings', 'actor'],
-function (jaws, settings, Actor) {
+['jaws', 'data/settings', 'actor', 'log'],
+function (jaws, settings, Actor, Log) {
 
-function _roll () {
-	return Math.round(Math.random() * 20);
+function _roll (sides) {
+	return Math.round(Math.random() * (sides || 20));
 }
 
 function Character (options) {
@@ -31,7 +31,7 @@ function Character (options) {
 	abilities.wisdom       = options.wisdom       || 10;
 	abilities.charisma     = options.charisma     || 8;
 
-	this._hitDie = options.hitDie || 20;
+	this._hitDie = options.hitDie || 10;
 
 	// Init and calculate modifiers.
 	this._modifiers = {};
@@ -107,20 +107,38 @@ Character.prototype.moveTo = function (xTile, yTile) {
  */
 Character.prototype.doAttack = function (target, details) {
 	var hitCheck = _roll() + this._modifiers.dexterity,
-		damage   = _roll() + this._modifiers.strength;
+		damage   = _roll(this._hitDie) + this._modifiers.strength;
 
+	Log.msg('%s attacks ' + target.getName(), this);
+	
 	if(target.isHit(hitCheck)) {
+		
+		Log.msg('%s hits!');
+
 		target.takeDamage({
 			source: this,
 			damage: damage,
 			type  : 'slashing'
 		});
+		this._isActing = false;
+
+		return true;
+	} 
+
+	else {
+
+		Log.msg('%s misses.', this);
+
+		return false;
 	}
 };
 
 // Details = {target: Character, damage: Number, type: String}
 Character.prototype.takeDamage = function (details) {
 	this._currentHealth -= details.damage;
+
+	Log.msg('%s takes ' + details.damage + ' points of damage!', this);
+
 	if(this._currentHealth < 0) {
 		this.kill();
 	}
@@ -161,6 +179,8 @@ Character.prototype.calculateModifiers = function () {
  * @return {Void};
  */
 Character.prototype.kill = function () {
+	Log.msg('%s is slain.', this);
+
 	this._isAlive = false;
 	this.isPassable = true;
 };

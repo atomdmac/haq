@@ -82,7 +82,8 @@ return function () {
 			height: settings.map.tile.height,
 			xTile: playerSpawn.xTile,
 			yTile: playerSpawn.yTile,
-			data: _data
+			data: _data,
+			name: 'Hans the Player'
 		});
 		_data.npcs = [];
 
@@ -97,7 +98,8 @@ return function () {
 						xTile: spawnPoint.xTile,
 						yTile: spawnPoint.yTile,
 						data : _data,
-						color: 'blue'
+						color: 'blue',
+						name : 'Monster ' + i
 					})
 				);
 			}

@@ -142,6 +142,21 @@ Map.prototype.getDistance = function (target1, target2) {
 	// TODO
 };
 
+Map.prototype.moveObject = function (obj, newX, newY) {
+	if(typeof obj.x !== 'number' || typeof obj.y !== 'number') return;
+
+	var items = this.at(obj.x, obj.y);
+	for(var i=0; i<items.length; i++) {
+		if(items[i] === obj) {
+			items.splice(i, 1);
+			obj.x = newX;
+			obj.y = newY;
+			this.push(obj);
+			break;
+		}
+	}
+};
+
 /**
  * Return an array of cells that represent a path from x1,y1 to x2,y2 if such a
  * path exists.  Else, return the boolean value FALSE.

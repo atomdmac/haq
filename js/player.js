@@ -1,6 +1,7 @@
-define(['character', 'animator'], function (Character, Animator) {
+define(['character', 'animator', 'log'], function (Character, Animator) {
 
 var Player = function (options) {
+	options.isPlayer = true;
 	Character.call(this, options);
 };
 

@@ -1,4 +1,4 @@
-define(['character'], function (Character) {
+define(['character', 'log'], function (Character) {
 
 var NPC = function (options) {
 	Character.call(this, options);
@@ -34,6 +34,13 @@ NPC.prototype.act = function () {
     this.image = canvas;
 
 	// TODO: Make NPCs do other stuff besides wander around.
+};
+
+NPC.prototype.move = function (direction) {
+	// If move command was successful, play all queued animations.
+	if(Character.prototype.move.call(this, direction)) {
+		this._isActing = false;
+	}
 };
 
 return NPC;

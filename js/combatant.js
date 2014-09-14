@@ -1,15 +1,23 @@
 define(
 ['jaws', 'data/settings', 'tile-sprite'],
-function (jaws, settings, TileSprite) {
+function (jaws, settings) {
 
-function Combatant (options) {
-	TileSprite.call(this, options);
+function Combatant (target, options) {
 
-	this._health    = options.health    || 100;
-	this._maxHealth = options.maxHealth || 100;
+	var combat = target.combat = {};
+
+	// Populate stats from options / defaults.
+	combat._health    = options.health    || 100;
+	combat._maxHealth = options.maxHealth || 100;
+	combat._onKill    = options.onKill    || function () {};
+
+	combat.attack       = _attack;
+	combat.damage       = _damage;
+	combat.heal         = _heal;
+	combat.getHealth    = _getHealth;
+	combat.getMaxHealth = _getMaxHealth;
+	combat.kill         = _kill;
 }
-
-Combatant.prototype = new TileSprite({});
 
 /**
  * Cause the Combatant to attempt to apply damage to another Combatant as
@@ -18,35 +26,38 @@ Combatant.prototype = new TileSprite({});
  * @param  {Object}    details An Object describing the attack type, weapon used, etc.
  * @return {Boolean}        TRUE if the attack hits, FALSE if it misses.
  */
-Combatant.prototype.attack = function (target, details) {
+function _attack (target, details) {
 	// TODO
-};
+}
 
 // Details = {target: Combatant, damage: Number, type: String}
-Combatant.prototype.damage = function (details) {
+function _damage (details) {
 	// TODO
-};
+}
 
 // Details = {source: Object, deltaHealth: Number}
-Combatant.prototype.heal = function (details) {
+function _heal (details) {
 	// TODO
-};
+}
 
-Combatant.prototype.getHealth = function () {
+function _getHealth () {
 	return this._health;
-};
+}
 
-Combatant.prototype.getMaxHealth = function () {
+function _getMaxHealth () {
 	return this._maxHealth;
-};
+}
 
 /**
  * Destory the Combatant.  This will typically be called when the Combatant's HP
  * drops to or below 0;
  * @return {Void}
  */
-Combatant.prototype.destroy = function () {
+function _kill () {
 	// TODO
-};
+}
+
+// Return interface.
+return Combatant;
 
 });

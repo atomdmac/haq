@@ -4,7 +4,9 @@ var Actor = function (config) {
 
 	TileSprite.call(this, config);
 
+	this._name      = config.name  || (new Date() + "");
 	this._data      = config.data  || {};
+	this._isPlayer  = config.isPlayer || false;
 	this._speed     = config.speed || 1;
 	this._fovRadius = config.fovRadius || 20;
 	this._isActing  = false;
@@ -27,12 +29,25 @@ var Actor = function (config) {
 		return this._isActing;
 	};
 
+	this.isPlayer = function () {
+		return this._isPlayer;
+	};
+
 };
 
 Actor.prototype = new TileSprite({});
 
+Actor.prototype.getName = function () {
+	return this._name;
+};
+
 Actor.prototype.act = function () {
 	this._isActing = true;
+};
+
+Actor.prototype.visibleToPlayer = function () {
+	if(this._data && this._data.player && this._data.player.canSee(this.xTile, this.yTile)) return true;
+	return false;	
 };
 
 Actor.prototype.canSee = function (xTile, yTile) {
@@ -125,6 +140,7 @@ Actor.prototype.moveTo = function (xTile, yTile) {
 
 	else {
 		console.log('Invalid move.  You need to implement a proper log, my friend.');
+
 		return false;
 	}
 };
