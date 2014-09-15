@@ -189,6 +189,10 @@ Character.prototype.calculateModifiers = function () {
 	}
 };
 
+Character.prototype.isAlive = function () {
+	return this._isAlive;
+};
+
 /**
  * Destory the Character.  This will typically be called when the Character's HP
  * drops to or below 0;
