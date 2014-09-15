@@ -134,6 +134,7 @@ Character.prototype.doAttack = function (target, details) {
 			damage: damage,
 			type  : 'slashing'
 		});
+		
 		this._isActing = false;
 
 		return true;
@@ -143,6 +144,8 @@ Character.prototype.doAttack = function (target, details) {
 
 		// Alert listeners that hit was unnsuccessful.
 		this.signals.missed.dispatch(this, target, details);
+
+		this._isActing = false;
 
 		return false;
 	}
