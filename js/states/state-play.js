@@ -58,7 +58,13 @@ return function () {
 		if(target.isPlayer()) Log.msg(observer.getName() + ' spots ' + target.getName());
 	}
 
-	this.update = function () {};
+	this.update = function () {
+		_data.npcs.sort( function (a, b) {
+			if(a.isAlive() && !b.isAlive()) return  1;
+			if(!a.isAlive() && b.isAlive()) return -1;
+			return 0;
+		});
+	};
 
 	// Debug draw functions
 	function _drawNpcPaths (npc) {
@@ -92,12 +98,15 @@ return function () {
 		jaws.fill('#000000');
 		_viewport.centerAround(_data.player);
 		_viewport.drawTileMap2(_data.map, _data.player);
-		_viewport.draw(_data.player);
 
+		// Draw NPCs
 		for(var i=0, ilen=_data.npcs.length; i<ilen; i++) {
 			if(_data.player.canSee(_data.npcs[i])) _viewport.draw(_data.npcs[i]);
 			if(settings.npc.drawPaths) _drawNpcPaths(_data.npcs[i]);
 		}
+
+		// Draw player.
+		_viewport.draw(_data.player);
 	};
 };
 
