@@ -1,6 +1,6 @@
 define(
-['jaws', 'data/settings', 'actor', 'log'],
-function (jaws, settings, Actor, Log) {
+['jaws', 'data/settings', 'actor', 'log', 'lib/signals'],
+function (jaws, settings, Actor, Log, Signals) {
 
 function _roll (sides) {
 	return Math.round(Math.random() * (sides || 20));
@@ -40,6 +40,17 @@ function Character (options) {
 	// Init and calculate health/hit points.
 	this._currentHealth = this.getMaxHealth() + this._modifiers.constitution;
 	this._isAlive = true;
+
+	// Signal objects for alerting parent objects of events.
+	this.signals = {
+		attacked: new Signals.Signal(),
+		hit     : new Signals.Signal(),
+		missed  : new Signals.Signal(),
+		damaged : new Signals.Signal(),
+		died    : new Signals.Signal(),
+		moved   : new Signals.Signal(),
+		saw     : new Signals.Signal()
+	};
 
 	// TODO: Add inventory component.
 	// TODO: Add stats component.
@@ -109,12 +120,15 @@ Character.prototype.doAttack = function (target, details) {
 	var hitCheck = _roll() + this._modifiers.dexterity,
 		damage   = _roll(this._hitDie) + this._modifiers.strength;
 
-	Log.msg('%s attacks ' + target.getName(), this);
+	// Alert listenrs that attack occured.
+	this.signals.attacked.dispatch(this, target, details);
 	
 	if(target.isHit(hitCheck)) {
 		
-		Log.msg('%s hits!');
+		// Alert listeners that hit was successful.
+		this.signals.hit.dispatch(this, target, details);
 
+		// Apply damage to target entity.
 		target.takeDamage({
 			source: this,
 			damage: damage,
@@ -127,7 +141,8 @@ Character.prototype.doAttack = function (target, details) {
 
 	else {
 
-		Log.msg('%s misses.', this);
+		// Alert listeners that hit was unnsuccessful.
+		this.signals.missed.dispatch(this, target, details);
 
 		return false;
 	}
@@ -137,7 +152,8 @@ Character.prototype.doAttack = function (target, details) {
 Character.prototype.takeDamage = function (details) {
 	this._currentHealth -= details.damage;
 
-	Log.msg('%s takes ' + details.damage + ' points of damage!', this);
+	// Alert listeners that we were damaged.
+	this.signals.damaged.dispatch(this, details);
 
 	if(this._currentHealth < 0) {
 		this.kill();
@@ -179,7 +195,8 @@ Character.prototype.calculateModifiers = function () {
  * @return {Void};
  */
 Character.prototype.kill = function () {
-	Log.msg('%s is slain.', this);
+	// Alert listeners that we have died.
+	this.signals.died.dispatch(this);
 
 	this._isAlive = false;
 	this.isPassable = true;

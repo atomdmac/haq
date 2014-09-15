@@ -11,14 +11,12 @@ Log.prototype.setElement = function (element) {
 	this._el = element;
 };
 
-Log.prototype.msg = function (msg, subject) {
+Log.prototype.msg = function (msg) {
 	if(msg.forEach) {
 		msg.forEach(this.msg(msg, subject));
 	} else {
-		if(subject && (subject.isPlayer() || subject.visibleToPlayer())) {
-			this._el.innerHTML  = this._el.innerHTML + '<br />' + String.format(msg, subject.getName());
-			this._el.scrollTop = this._el.scrollHeight;
-		}
+		this._el.innerHTML  = this._el.innerHTML + msg + '<br />';
+		this._el.scrollTop = this._el.scrollHeight;
 	}
 };
 
