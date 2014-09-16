@@ -10,18 +10,6 @@ function Character (options) {
 
 	Actor.call(this, options);
 
-	// Add stats component.
-	var stats = this.stats = {};
-
-	// Populate stats from options / defaults.
-	stats._currentHealth    = options.health    || 100;
-	stats._maxHealth = options.maxHealth || 100;
-	stats._agility   = options.agility   || 10;
-	stats._smarts    = options.smarts    || 10;
-	stats._spirit    = options.spirit    || 10;
-	stats._strength  = options.strength  || 10;
-	stats._vigor     = options.vigor     || 10;
-
 	var abilities = this._abilities = {};
 	
 	abilities.strength     = options.strength     || 15;
@@ -53,7 +41,6 @@ function Character (options) {
 	};
 
 	// TODO: Add inventory component.
-	// TODO: Add stats component.
 }
 
 Character.prototype = new Actor({});
@@ -134,7 +121,7 @@ Character.prototype.doAttack = function (target, details) {
 			damage: damage,
 			type  : 'slashing'
 		});
-		
+
 		this._isActing = false;
 
 		return true;
