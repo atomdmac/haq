@@ -145,7 +145,7 @@ Character.prototype.takeDamage = function (details) {
 	// Alert listeners that we were damaged.
 	this.signals.damaged.dispatch(this, details);
 
-	if(this._currentHealth < 0) {
+	if(this._currentHealth <= 0) {
 		this.kill();
 	}
 };
