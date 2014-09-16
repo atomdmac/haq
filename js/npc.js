@@ -24,7 +24,7 @@ NPC.prototype.act = function () {
 	this.updateSurroundings();
 	this.updateMemory();
 	
-	if(this.canSee(this._data.player)) {
+	if(this.canSee(this._data.player) && this._data.player.isAlive()) {
 		this.updateTravelPath(this._data.player);
 	}
 
