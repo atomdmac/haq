@@ -45,6 +45,14 @@ function Character (options) {
 
 Character.prototype = new Actor({});
 
+Character.prototype.act = function () {
+	if(this._isAlive) {
+		Actor.prototype.act.call(this);
+	} else {
+		this._isActing = false;
+	}
+};
+
 Character.prototype.draw = function () {
 	Actor.prototype.draw.call(this);
 
