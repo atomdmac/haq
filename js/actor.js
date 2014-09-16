@@ -139,7 +139,6 @@ Actor.prototype.moveTo = function (xTile, yTile) {
 	} 
 
 	else {
-		console.log('Invalid move.  You need to implement a proper log, my friend.');
 
 		return false;
 	}
