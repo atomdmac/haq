@@ -1,6 +1,16 @@
 define(['character', 'log'], function (Character) {
 
 var NPC = function (options) {
+
+	// Define character parameters for NPCs
+	options.strength     = 10;
+	options.dexterity    = 10;
+	options.constitution = 10;
+	options.intelligence = 10;
+	options.wisdom       = 10;
+	options.charisma     = 10;
+	options.hitDie       = 5;
+
 	Character.call(this, options);
 };
 
