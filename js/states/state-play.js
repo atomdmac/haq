@@ -94,6 +94,64 @@ return function () {
 		}
 	}
 
+	function overlapsCells (actor) {
+		var overlappingCells = [];
+		var items;
+		var rect = actor.rect();
+
+		try {
+			var from_col = parseInt(rect.x / _data.map.cell_size[0], 10);
+			if (from_col < 0) {
+				from_col = 0;
+			}
+			var to_col = parseInt(rect.right / _data.map.cell_size[0], 10);
+			if (to_col >= _data.map.size[0]) {
+				to_col = _data.map.size[0] - 1;
+			}
+			var from_row = parseInt(rect.y / _data.map.cell_size[1], 10);
+			if (from_row < 0) {
+				from_row = 0;
+			}
+			var to_row = parseInt(rect.bottom / _data.map.cell_size[1], 10);
+			if (to_row >= _data.map.size[1]) {
+				to_row = _data.map.size[1] - 1;
+			}
+
+			for(var col = from_col; col <= to_col; col++) {
+				for(var row = from_row; row <= to_row; row++) {
+					overlappingCells.push({x: col, y: row});
+					// _data.map.cells[col][row].forEach( function(item, total) { 
+					// 	if(overlappingCells.indexOf(item) == -1) { overlappingCells.push(item) }
+					// })
+				}
+			}
+		}
+		catch(e) {
+			// ... problems
+			debugger;
+		}
+		return overlappingCells;
+	}
+
+	function blackOutCells (cells) {
+		var ctx = jaws.context;
+			ctx.save();
+			ctx.fillStyle = "#000";
+		for(var i=0; i<cells.length; i++) {
+			if(_data.player.canSee(cells[i].x, cells[i].y)) continue;
+
+			ctx.beginPath();
+			ctx.rect(
+				cells[i].x * settings.map.tile.width,
+				cells[i].y * settings.map.tile.height,
+				settings.map.tile.width,
+				settings.map.tile.height
+			);
+			ctx.fill();
+		}
+		ctx.restore();
+	}
+
 	this.draw = function () {
 		jaws.fill('#000000');
 		_viewport.centerAround(_data.player);
@@ -101,9 +159,19 @@ return function () {
 
 		// Draw NPCs
 		for(var i=0, ilen=_data.npcs.length; i<ilen; i++) {
-			if(_data.player.canSee(_data.npcs[i])) _viewport.draw(_data.npcs[i]);
+			//if(_data.player.canSee(_data.npcs[i])) {
+				_viewport.draw(_data.npcs[i]);
+				_viewport.apply(function () {
+					blackOutCells(
+						overlapsCells(_data.npcs[i])
+					);
+				});
+			//}
+
 			if(settings.npc.drawPaths) _drawNpcPaths(_data.npcs[i]);
 		}
+
+
 
 		// Draw player.
 		_viewport.draw(_data.player);
