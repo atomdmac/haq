@@ -43,7 +43,7 @@ function Character (options) {
 	// TODO: Add inventory component.
 }
 
-Character.prototype = new Actor({});
+Character.prototype = Object.create(Actor.prototype);
 
 Character.prototype.act = function () {
 	if(this._isAlive) {

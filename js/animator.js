@@ -3,7 +3,7 @@ define(['lib/frame-tween'], function (FrameTween) {
 return new function () {
 
 	var _queue = [],
-		_duration = 5,
+		_duration = 8,
 		_index,
 		_isPlaying = false;
 
@@ -40,6 +40,7 @@ return new function () {
 
 	this.tick = function () {
 		if(_isPlaying) {
+		if(!_queue.length) this.clear();
 			/*if(!_queue[_index].tick()) {
 				_index++;
 			}*/
@@ -50,7 +51,6 @@ return new function () {
 			}
 		}
 
-		if(!_queue.length) this.clear();
 	};
 
 };

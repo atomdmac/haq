@@ -35,7 +35,7 @@ var Actor = function (config) {
 
 };
 
-Actor.prototype = new TileSprite({});
+Actor.prototype = Object.create(TileSprite.prototype);
 
 Actor.prototype.getName = function () {
 	return this._name;

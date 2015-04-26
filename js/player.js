@@ -5,7 +5,7 @@ var Player = function (options) {
 	Character.call(this, options);
 };
 
-Player.prototype = new Character({});
+Player.prototype = Object.create(Character.prototype);
 
 Player.prototype.act = function () {
 	Character.prototype.act.call(this);

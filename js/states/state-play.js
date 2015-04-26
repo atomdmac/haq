@@ -155,26 +155,11 @@ return function () {
 	this.draw = function () {
 		jaws.fill('#000000');
 		_viewport.centerAround(_data.player);
-		_viewport.drawTileMap2(_data.map, _data.player);
 
-		// Draw NPCs
-		for(var i=0, ilen=_data.npcs.length; i<ilen; i++) {
-			//if(_data.player.canSee(_data.npcs[i])) {
-				_viewport.draw(_data.npcs[i]);
-				_viewport.apply(function () {
-					blackOutCells(
-						overlapsCells(_data.npcs[i])
-					);
-				});
-			//}
-
-			if(settings.npc.drawPaths) _drawNpcPaths(_data.npcs[i]);
-		}
-
-
+		_viewport.drawGameWorld(_data);
 
 		// Draw player.
-		_viewport.draw(_data.player);
+		// _viewport.draw(_data.player);
 	};
 };
 

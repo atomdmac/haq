@@ -14,7 +14,7 @@ var NPC = function (options) {
 	Character.call(this, options);
 };
 
-NPC.prototype = new Character({});
+NPC.prototype = Object.create(Character.prototype);
 
 NPC.prototype.act = function () {
 	if(!this._isAlive) return;

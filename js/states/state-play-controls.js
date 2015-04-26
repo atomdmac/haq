@@ -41,41 +41,41 @@ return function () {
 
 		
 		// Move up.
-		if(jaws.pressedWithoutRepeat('numpad9')) {
+		if(jaws.pressed('numpad9')) {
 			_data.player.move('NE');
 		}
 
-		else if(jaws.pressedWithoutRepeat('numpad8')) {
+		else if(jaws.pressed('numpad8')) {
 			_data.player.move('N');
 		}
 
-		else if(jaws.pressedWithoutRepeat('numpad7')) {
+		else if(jaws.pressed('numpad7')) {
 			_data.player.move('NW');
 		}
 		
-		else if(jaws.pressedWithoutRepeat('numpad6')) {
+		else if(jaws.pressed('numpad6')) {
 			_data.player.move('E');
 		}
 
-		else if(jaws.pressedWithoutRepeat('numpad4')) {
+		else if(jaws.pressed('numpad4')) {
 			_data.player.move('W');
 		}
 
-		else if(jaws.pressedWithoutRepeat('numpad3')) {
+		else if(jaws.pressed('numpad3')) {
 			_data.player.move('SE');
 		}
 
 		// Move down
-		else if(jaws.pressedWithoutRepeat('numpad2')) {
+		else if(jaws.pressed('numpad2')) {
 			_data.player.move('S');
 		}
 
-		else if(jaws.pressedWithoutRepeat('numpad1')) {
+		else if(jaws.pressed('numpad1')) {
 			_data.player.move('SW');
 		}
 
 		// Wait.
-		else if(jaws.pressedWithoutRepeat('. numpad5')) {
+		else if(jaws.pressed('. numpad5')) {
 			_data.player.wait();
 		}
 
@@ -111,7 +111,7 @@ return function () {
 	};
 
 	this.draw = function () {
-		if(Animator.isPlaying) _previousState.draw();
+		if(Animator.isPlaying()) _previousState.draw();
 	};
 
 };
