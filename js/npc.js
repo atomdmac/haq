@@ -28,9 +28,18 @@ NPC.prototype.act = function () {
 		this.updateTravelPath(this._data.player);
 	}
 
+	// Move toward the player.
 	if(this.travel()) {
 		this.color = 'orange';
-	} else {
+	}
+
+	// We're right next to the player.  Attack 'em!
+	else if(this._data.map.isAdjacent(this, this._data.player)) {
+		this.moveTo(this._data.player);
+	}
+
+	// Nothing interesting is going on.  Wander around.
+	else {
 		this.color = '#0000ff';
 		this.wander();
 	}
