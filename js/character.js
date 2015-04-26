@@ -54,6 +54,10 @@ Character.prototype.act = function () {
 };
 
 Character.prototype.draw = function () {
+	var ctx = this.image.getContext('2d');
+	ctx.fillStyle = this.color;
+	ctx.fillRect(0, 0, this.width, this.height);
+
 	Actor.prototype.draw.call(this);
 
 	var context = this.context,

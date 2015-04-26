@@ -34,14 +34,6 @@ NPC.prototype.act = function () {
 		this.color = '#0000ff';
 		this.wander();
 	}
-	// TODO: Allow JawsJS library to handle re-coloring without having to reset a Sprite's canvas/context. 
-	var canvas = document.createElement('canvas');
-    var context = canvas.getContext('2d');
-	canvas.width = this.width;
-  	canvas.height = this.height;
-    context.fillStyle = this.color;
-    context.fillRect(0, 0, this.width, this.height);
-    this.image = canvas;
 
 	// TODO: Make NPCs do other stuff besides wander around.
 };
