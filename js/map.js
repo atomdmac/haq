@@ -134,6 +134,19 @@ Map.prototype.getAdjacent = function (xTile, yTile) {
 
 };
 
+Map.prototype.isAdjacent = function (xTile1, yTile1, xTile2, yTile2) {
+	// Allow objects to be provided instead of individual coords.
+	if(typeof xTile1 === 'object' && typeof yTile1 === 'object') {
+		var one = xTile1, two = yTile1;
+		xTile1 = one.xTile;
+		yTile1 = one.yTile;
+		xTile2 = two.xTile;
+		yTile2 = two.yTile;
+	}
+
+	if(Math.abs(xTile1 - xTile2) <= 1 && Math.abs(yTile1 - yTile2) <= 1) return true;
+};
+
 Map.prototype.getMoveableDirections = function (xTile, yTile) {
 	// TODO
 };
