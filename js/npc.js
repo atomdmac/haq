@@ -45,6 +45,11 @@ NPC.prototype.move = function (direction) {
 	}
 };
 
+NPC.prototype.kill = function () {
+	this.color = '#0000ff';
+	Character.prototype.kill.call(this);
+};
+
 return NPC;
 
 });
