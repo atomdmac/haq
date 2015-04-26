@@ -145,8 +145,8 @@ Actor.prototype.moveTo = function (xTile, yTile) {
 };
 
 Actor.prototype.wander = function () {
-	var dirs = ['N', 'E', 'S', 'W'],
-		index = Math.floor(Math.random() * 4);
+	var dirs = ['N', 'NE', 'E', 'SE', 'S', 'SE', 'W', 'NW'],
+		index = Math.floor(Math.random() * 8);
 
 	this.move(dirs[index]);
 };
