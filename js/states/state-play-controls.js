@@ -84,6 +84,9 @@ return function () {
 	this.setup = function (data) {
 		_data = data;
 		_previousState = jaws.previous_game_state;
+
+		// Draw initial state.
+		_previousState.draw();
 	};
 
 	this.update = function () {
